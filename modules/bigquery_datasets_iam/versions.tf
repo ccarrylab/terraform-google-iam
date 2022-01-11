@@ -17,15 +17,13 @@
 terraform {
   required_version = ">= 0.13"
   required_providers {
-
     google = {
       source  = "hashicorp/google"
-      version = ">= 3.53, < 5.0"
+      version = "~> 4.0"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 4.0"
     }
   }
-
-  provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-iam:bigquery_dataset_iam/v7.4.0"
-  }
-
 }

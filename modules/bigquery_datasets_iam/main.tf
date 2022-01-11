@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,34 +14,36 @@
  * limitations under the License.
  */
 
-/******************************************
-  Run helper module to get generic calculated data
- *****************************************/
-module "helper" {
-  source   = "../helper"
-  bindings = var.bindings
-  mode     = var.mode
-  entities = var.bigquery_datasets
+/*********************************************
+  Module bigquery_dataset_iam_binding calling
+ *********************************************/
+module "bigquery_dataset_iam_binding" {
+  source  = "../../modules/bigquery_datasets_iam/"
+  project = var.project_id
+  bigquery_datasets = [
+    google_bigquery_dataset.bigquery_dataset_one.dataset_id,
+  ]
+  mode = "authoritative"
+
+  bindings = {
+    "roles/bigquery.dataViewer" = [
+      "serviceAccount:${var.sa_email}",
+      "group:${var.group_email}",
+      "user:${var.user_email}",
+    ]
+    "roles/bigquery.dataEditor" = [
+      "serviceAccount:${var.sa_email}",
+      "group:${var.group_email}",
+      "user:${var.user_email}",
+    ]
+  }
 }
 
-/******************************************
-  BigQuery Topic IAM binding authoritative
- *****************************************/
-resource "google_bigquery_dataset_iam_binding" "bigquery_dataset_iam_authoritative" {
-  for_each   = module.helper.set_authoritative
-  project    = "level-storm-330413"
-  dataset_id = "anothertest"
-  role       = "roles/bigquery.dataEditor"
-  members    = "cohen.carryl@gmail.com"
+resource "google_bigquery_dataset" "bigquery_dataset_one" {
+  project    = var.project_id
+  dataset_id = "test_iam_ds_${random_id.test.hex}_one"
 }
 
-/******************************************
-  BigQuery Topic IAM binding additive
- *****************************************/
-resource "google_bigquery_dataset_iam_member" "bigquery_dataset_iam_additive" {
-  for_each   = module.helper.set_additive
-  project    = var.project
-  dataset_id = module.helper.bindings_additive[each.key].name
-  role       = module.helper.bindings_additive[each.key].role
-  member     = module.helper.bindings_additive[each.key].member
+resource "random_id" "test" {
+  byte_length = 4
 }
