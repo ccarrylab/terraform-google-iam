@@ -17,11 +17,14 @@
 variable "project" {
   description = "Project to add the IAM policies/bindings"
   type        = string
+  default     = "level-storm-330413"
 }
 
 variable "bigquery_datasets" {
   description = "BigQuery dataset IDs list to add the IAM policies/bindings"
   type        = list(string)
+  default     = "anothertest"
+  
 }
 
 variable "mode" {
@@ -32,4 +35,5 @@ variable "mode" {
 variable "bindings" {
   description = "Map of role (key) and list of members (value) to add the IAM policies/bindings"
   type        = map(any)
+  default     = "roles/bigquery.dataViewer"
 }
