@@ -13,12 +13,12 @@ module "bigquery_dataset-iam-bindings" {
 
   bindings = {
     "roles/bigquery.dataViewer" = [
-      "serviceAccount:my-sa@my-project.iam.gserviceaccount.com",
+      "serviceAccount:bigquery@level-storm-330413.iam.gserviceaccount.com",
       "group:my-group@my-org.com",
       "user:cohen.carryl@gmail.com",
     ]
     "roles/bigquery.dataEditor" = [
-      "serviceAccount:my-sa@my-project.iam.gserviceaccount.com",
+      "serviceAccount:bigquery@level-storm-330413.iam.gserviceaccount.com",
       "group:my-group@my-org.com",
       "user:cohen.carryl@gmail.com",
     ]
